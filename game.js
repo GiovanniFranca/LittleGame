@@ -8,6 +8,9 @@ const c = canvas.getContext("2d");
 canvas.width = 1024;
 canvas.height = 576;
 
+const sprite = new Image();
+sprite.src = "sprite.png";
+
 let raf;
 const background = new Image();
 background.src = "https://wallpaperaccess.com/full/869.jpg";
@@ -22,6 +25,7 @@ const dmgPrice = document.querySelector(".dmg-price");
 const cdrPrice = document.querySelector(".cdr-price");
 const vlcPrice = document.querySelector(".vlc-price");
 
+let flipped = true;
 let gameover = false;
 let spawnSpeed = 2000;
 let radius;
@@ -32,6 +36,13 @@ let close;
 let damagePrice;
 let cooldownPrice;
 let velocityPrice;
+
+const spriteSize = 32;
+let frameX = 0;
+let frameY = 0;
+let gameFrame = 0;
+let size = 4;
+const staggerFrames = 7;
 
 const health = document.querySelector(".health");
 
@@ -54,6 +65,19 @@ const enemies = [];
 
 /////////////////////////////////////////
 // FUNCTIONS
+const drawSprite = function () {
+  c.drawImage(
+    sprite,
+    0,
+    0,
+    32,
+    32,
+    player.position.x,
+    player.position.y,
+    32,
+    32
+  );
+};
 
 const randomColor = function () {
   const randomR = Math.trunc(Math.random() * 255) + 1;
@@ -65,9 +89,10 @@ const randomColor = function () {
 
 const detectCollisionWithPlayer = function (enemy, index) {
   if (
-    enemy.position.y + enemy.radius >= player.position.y &&
-    enemy.position.x + enemy.radius >= player.position.x &&
-    enemy.position.x - enemy.radius < player.position.x + player.size.width
+    enemy.position.y + enemy.radius - player.size.height >= player.position.y &&
+    enemy.position.x + enemy.radius - player.size.height >= player.position.x &&
+    enemy.position.x - enemy.radius - player.size.height <
+      player.position.x + player.size.width / 2
   ) {
     enemies.splice(index, 1);
     player.health -= enemy.damage;
@@ -108,8 +133,8 @@ const detectProjectileCollision = function (projectile, enemy, index, indexP) {
     if (enemy.health <= 0) {
       setTimeout(() => {
         enemies.splice(index, 1);
-        player.gold += 15;
-        player.health += 10;
+        player.gold += 20;
+        player.health += 5;
         health.style.width = `${player.health}px`;
         gold.textContent = `${player.gold}G`;
 
@@ -167,13 +192,22 @@ class Player {
   }
   // Responsavel por re-desenhar o player a cada frame
   draw() {
-    c.fillStyle = "white";
-    c.fillRect(
-      this.position.x,
-      this.position.y,
-      this.size.width,
-      this.size.height
+    c.drawImage(
+      sprite,
+      spriteSize * frameX,
+      frameY * spriteSize + 1,
+      spriteSize,
+      spriteSize,
+      player.position.x,
+      player.position.y,
+      spriteSize * 2,
+      spriteSize * 2
     );
+    if (gameFrame % staggerFrames === 0) {
+      if (frameX < size) frameX++;
+      else frameX = 0;
+    }
+    gameFrame++;
   }
 
   // Responsavel por todas as alterações de posição do player
@@ -181,7 +215,10 @@ class Player {
     this.draw();
     this.position.x += this.velocity.x;
     this.position.y += this.velocity.y;
-    if (this.position.y + this.size.height + this.velocity.y >= canvas.height) {
+    if (
+      this.position.y + this.size.height + this.velocity.y >=
+      canvas.height - 32
+    ) {
       this.velocity.y = 0;
       this.isOnGround = true;
     } else {
@@ -272,7 +309,7 @@ class Projectile {
 const player = new Player(
   { x: 100, y: 100 },
   { x: 0, y: 2 },
-  { width: 50, height: 50 },
+  { width: 32, height: 32 },
   { isOnGround: false },
   10,
   300,
@@ -290,14 +327,14 @@ const createProjectile = function (e) {
   projectiles.push(
     new Projectile(
       {
-        x: player.position.x + player.size.width / 2,
-        y: player.position.y,
+        x: player.position.x + 32,
+        y: player.position.y + 32,
       },
       {
         x: Math.cos(angle) * 5 * player.projectileVelocity,
         y: Math.sin(angle) * 5 * player.projectileVelocity,
       },
-      7
+      4
     )
   );
 };
@@ -312,7 +349,7 @@ const spawnEnemies = () => {
   );
   radius = Math.trunc(Math.random() * 40) + 20;
   enemyDamage *= 1.01;
-  enemyHealth *= 1.01;
+  enemyHealth *= 1.02;
   spawnSpeed *= 0.999;
   enemies.push(
     new Enemy(
@@ -370,7 +407,10 @@ function animate() {
       particle.update();
     }
   });
+
+  // Sprite
 }
+
 let spawn = setInterval(spawnEnemies, spawnSpeed);
 if (!gameover) {
   window.addEventListener("keydown", function (e) {
@@ -421,14 +461,25 @@ if (!gameover) {
       case "d":
         keyPressed.d.pressed = true;
         lastKeyPressed = "d";
+        frameY = 2;
+        size = 7;
         return;
       case "a":
         keyPressed.a.pressed = true;
+        frameY = 4;
+        size = 7;
         lastKeyPressed = "a";
         return;
       case "w":
         if (player.isOnGround) {
           player.velocity.y = -10;
+          if (keyPressed.d.pressed || lastKeyPressed === "d") {
+            frameY = 3;
+            size = 10;
+          } else if (keyPressed.a.pressed || lastKeyPressed === "a") {
+            frameY = 5;
+            size = 10;
+          }
           return;
         }
     }
@@ -438,9 +489,25 @@ if (!gameover) {
     switch (e.key) {
       case "d":
         keyPressed.d.pressed = false;
+        frameY = 0;
+        size = 4;
+        frameX = 0;
         return;
       case "a":
         keyPressed.a.pressed = false;
+        return;
+      case "w":
+        setTimeout(() => {
+          if (keyPressed.d.pressed) {
+            frameY = 0;
+            size = 4;
+            frameX = 0;
+          } else if (keyPressed.a.pressed) {
+            frameY = 4;
+            size = 4;
+            frameX = 0;
+          }
+        }, 500);
         return;
     }
   });
@@ -469,19 +536,23 @@ const init = function () {
   damagePrice = 100;
   cooldownPrice = 100;
   velocityPrice = 100;
+  vlcPrice.textContent = velocityPrice;
+  dmgPrice.textContent = velocityPrice;
+  cdrPrice.textContent = velocityPrice;
 
   player.position.x = 100;
   player.position.y = 100;
   player.velocity.x = 0;
   player.velocity.y = 2;
-  player.size.width = 50;
-  player.size.height = 50;
+  player.size.width = 32;
+  player.size.height = 32;
   player.damage = 10;
   player.health = 200;
   player.cooldown = 600;
   player.projectileVelocity = 0.5;
   player.gold = 0;
   health.style.width = `${player.health}px`;
+  gold.textContent = player.gold;
 
   animate();
 };

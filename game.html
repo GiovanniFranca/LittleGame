@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Game</title>
+    <script defer src="game.js"></script>
+    <link rel="stylesheet" href="game.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="gold">0G</div>
+      <div class="UI">
+        <div class="health"></div>
+        <div class="shop hidden">
+          <div class="damage card">
+            <div class="name">DANO</div>
+            <ion-icon name="trending-up-outline"></ion-icon>
+            <div class="price dmg-price">100G</div>
+          </div>
+          <div class="cooldown card">
+            <div class="name">CADÊNCIA</div>
+            <ion-icon class="icons" name="refresh-outline"></ion-icon>
+            <div class="price cdr-price">100G</div>
+          </div>
+          <div class="velocity card">
+            <div class="name">VELOCIDADE</div>
+            <ion-icon class="icon" name="play-forward-outline"></ion-icon>
+            <div class="price vlc-price">100G</div>
+          </div>
+        </div>
+      </div>
+      <canvas id="game"> </canvas>
+    </div>
+    <script
+      type="module"
+      src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"
+    ></script>
+    <script
+      nomodule
+      src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"
+    ></script>
+  </body>
+</html>
