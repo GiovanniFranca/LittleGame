@@ -8,12 +8,14 @@ html {
 }
 body {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
   position: relative;
   background-repeat: no-repeat;
-  height: 100vh;
+  height: 110vh;
   background: linear-gradient(rgb(241, 156, 29), rgb(233, 76, 84));
   font-family: "Press Start 2P", cursive;
+  overflow-x: hidden;
 }
 #game {
   margin-top: 5rem;
@@ -154,4 +156,32 @@ ion-icon {
 .span {
   grid-column: 1/-1;
   justify-self: center;
+}
+
+.header {
+  background-color: #d0bfff;
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  padding: 1rem;
+  gap: 4rem;
+  font-family: "Roboto", sans-serif;
+  margin-left: 1rem;
+}
+.navigation ul {
+  display: flex;
+  gap: 4rem;
+}
+li {
+  list-style: none;
+  font-size: 2.4rem;
+  text-transform: uppercase;
+}
+a {
+  text-decoration: none;
+  color: #343a40;
+}
+.logo {
+  width: 6.4rem;
 }

@@ -9,7 +9,7 @@ canvas.width = 1024;
 canvas.height = 576;
 
 const sprite = new Image();
-sprite.src = "sprite.png";
+sprite.src = "/img/sprite.png";
 
 let raf;
 const background = new Image();
@@ -27,7 +27,7 @@ const vlcPrice = document.querySelector(".vlc-price");
 
 let flipped = true;
 let gameover = false;
-let spawnSpeed = 2000;
+let spawnSpeed = 2000000000;
 let radius;
 let enemyHealth;
 let enemyDamage;
@@ -320,10 +320,10 @@ const player = new Player(
 
 const createProjectile = function (e) {
   const angle = Math.atan2(
-    e.clientY - player.position.y,
-    e.clientX - player.position.x - player.size.width * 5.6
+    e.clientY - player.position.y - canvas.offsetTop,
+    e.clientX - player.position.x - (innerWidth - canvas.width) / 2
   );
-  console.log(e.clientX - player.position.x);
+  console.log(e.clientY - canvas.offsetTop);
   projectiles.push(
     new Projectile(
       {
@@ -466,9 +466,9 @@ if (!gameover) {
         return;
       case "a":
         keyPressed.a.pressed = true;
+        lastKeyPressed = "a";
         frameY = 4;
         size = 7;
-        lastKeyPressed = "a";
         return;
       case "w":
         if (player.isOnGround) {
@@ -495,7 +495,7 @@ if (!gameover) {
         return;
       case "a":
         keyPressed.a.pressed = false;
-        frameY = 0;
+        frameY = 6;
         size = 4;
         frameX = 0;
         return;
