@@ -495,6 +495,9 @@ if (!gameover) {
         return;
       case "a":
         keyPressed.a.pressed = false;
+        frameY = 0;
+        size = 4;
+        frameX = 0;
         return;
       case "w":
         setTimeout(() => {
@@ -556,4 +559,10 @@ const init = function () {
 
   animate();
 };
-init();
+const listner = function () {
+  init();
+  document.querySelector(".overlay").style.display = "none";
+  window.removeEventListener("keydown", listner, false);
+};
+
+const start = window.addEventListener("keydown", listner);

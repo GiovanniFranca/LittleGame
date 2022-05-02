@@ -7,11 +7,32 @@
     <title>Game</title>
     <script defer src="game.js"></script>
     <link rel="stylesheet" href="game.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
     <div class="container">
       <div class="gold">0G</div>
       <div class="UI">
+        <div class="overlay">
+          <div class="left">
+            <div class="keys">
+              <img src="W-Key.png" alt="w-key" class="key keyw" />
+              <img src="A-Key.png" alt="a-key" class="key keya" />
+              <img src="D-Key.png" alt="d-key" class="key keyd" />
+            </div>
+            <span class="text">move the player</span>
+          </div>
+          <div class="right">
+            <img src="mouse-left-button.svg" alt="mouse" class="mouse" />
+            <span class="shoot text">shoot</span>
+          </div>
+          <span class="text span">PRESS ENTER TO START</span>
+        </div>
         <div class="health"></div>
         <div class="shop hidden">
           <div class="damage card">

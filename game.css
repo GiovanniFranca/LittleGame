@@ -13,6 +13,7 @@ body {
   background-repeat: no-repeat;
   height: 100vh;
   background: linear-gradient(rgb(241, 156, 29), rgb(233, 76, 84));
+  font-family: "Press Start 2P", cursive;
 }
 #game {
   margin-top: 5rem;
@@ -59,7 +60,7 @@ body {
   justify-content: space-between;
   padding: 4rem;
   color: white;
-  font-size: 2.4rem;
+  font-size: 1.8rem;
   letter-spacing: 0.2rem;
 
   user-select: none;
@@ -85,4 +86,72 @@ ion-icon {
 
 .canvas {
   background: url("https://img.wallpapersafari.com/desktop/1024/576/36/19/KODTtH.jpg");
+}
+.overlay {
+  position: absolute;
+  top: 0;
+  width: 1024px;
+  height: 576px;
+  background-color: #444;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-content: center;
+  gap: 8rem;
+
+  user-select: none;
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+}
+.keys {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+.key {
+  width: 32px;
+  height: 32px;
+  object-fit: cover;
+  object-position: 0;
+  grid-row: 1;
+}
+.keyw {
+  grid-column: 2;
+  grid-row: 1;
+}
+.keya {
+  grid-column: 1;
+  grid-row: 2;
+}
+.keyd {
+  grid-column: 3;
+  grid-row: 2;
+}
+.mouse {
+  height: 64px;
+  grid-row: 1;
+}
+.left {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.text {
+  margin-top: 2rem;
+  font-size: 1.2rem;
+  text-transform: uppercase;
+  color: #ddd;
+}
+.right {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.menucontainer {
+  display: flex;
+  flex-direction: column;
+}
+.span {
+  grid-column: 1/-1;
+  justify-self: center;
 }
